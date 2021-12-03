@@ -1,6 +1,7 @@
 name: Manual deployment of Kyverno
 on:
   workflow_dispatch:
+    inputs:
       dry-run:
         description: Use dry-run instead of actual installation
         default: 'true'
