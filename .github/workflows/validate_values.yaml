@@ -1,0 +1,84 @@
+name: Validate Helm values
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+    - 'helm/values/kyverno/**'
+    - 'helm/values/kyverno-policies/**'
+
+jobs:
+  deploy:
+    name: validate kyverno values
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.3.4
+        with:
+          personalAccessToken: ${{ secrets.DO_K8S_TOKEN }}
+          clusterName: ${{ secrets.DO_K8S_CLUSTER_NAME }}
+
+      - name: Setup Helm
+        id: install
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3.7.1' # default is latest stable
+
+      - name: Add Kyverno Helm chart
+        id: add-chart
+        run: |
+          helm repo add kyverno https://kyverno.github.io/kyverno/
+
+      - name: Scan Helm repo for charts
+        id: scan-chart
+        run: |
+          helm repo update
+
+      - name: Install helm diff
+        run: helm plugin install https://github.com/databus23/helm-diff
+
+      - name: Run helm diff
+        id: diff
+        run: |
+          helm diff upgrade kyverno -f ./helm/values/kyverno/values.yaml -n kyverno kyverno/kyverno --suppress-secrets --no-color | tee diff.txt
+          REPORT="$(cat diff.txt)"
+          REPORT="${REPORT//'%'/'%25'}"
+          REPORT="${REPORT//$'\n'/'%0A'}"
+          REPORT="${REPORT//$'\r'/'%0D'}"
+          rm diff.txt
+          echo "::set-output name=diff::$REPORT"
+
+      - name: Write output for pull request
+        uses: actions/github-script@v4.0.2
+        if: github.event_name == 'pull_request' || always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `### PRD values diff for Sonarqube in tools-prd
+
+            #### Helm diff 📖 \🖌\`${{ steps.diff.outcome }}\`
+
+            <details><summary>Show diff</summary>
+
+            \`\`\`
+              ${{steps.diff.outputs.diff}}
+            \`\`\`
+
+            *You can see the complete command output [here](https://github.com/${{github.repository}}/actions/runs/${{github.run_id}})*
+
+            </details>
+
+            *Triggered by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
