@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.0.0...v1.1.0) (2021-12-03)
+
+
+### Features
+
+* Policy requiring appname labels to be set ([f0b9ed4](https://www.github.com/sbulav/do-k8s-challenge/commit/f0b9ed49683a7f16a381a40e52338399a7cd52b5))
+
 ## 1.0.0 (2021-12-03)
 
 
