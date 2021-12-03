@@ -99,19 +99,24 @@ Merge the PR and notice that deployment has been triggered automatically:
 
 ![adding_policy02](assets/images/adding_policy02.png)
 
-Now let's push an image into our registry. I'll use `nginx:latest` for that:
+Now let's push an image into our Digital Ocean Container Registry. I'll use
+`nginx:latest` for that:
 
 ``` bash
 docker tag nginx:latest registry.digitalocean.com/do-k8s-challenge-cr/nginx:latest
 docker push registry.digitalocean.com/do-k8s-challenge-cr/nginx:latest
 ```
 
-After successful deployment, let's try to run Pods with images from different
-registries:
+After successful deployment new Policies should enforce:
+- label `app.kubernetes.io/name` is set
+- only images from `registry.digitalocean.com` are allowed
+
+Let's try to run Pods with images from different registries:
 
 ![adding_policy03](assets/images/adding_policy03.png)
 
-As you can see, image from `DockerHub` was blocked, while Policy allow to run
-image from `quay.io`. Another policy require to set up correct label for app name.
+As you can see, image from `DockerHub` was blocked, and label is required
+for Pod creation.
 
-After requirements were satisfied, Pod was created.
+After requirements were satisfied, Pod with image from
+`registry.digitalocean.com` was created.
