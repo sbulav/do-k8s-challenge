@@ -4,7 +4,7 @@ namespace:
 
 # -- Additional labels
 customLabels:
-  repo_url: https://github.com/sbulav/do-k8s-challenge
+  repo_url: github.com/sbulav/do-k8s-challenge
 
 rbac:
   create: true
