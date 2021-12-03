@@ -60,7 +60,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `### PRD values diff for Sonarqube in tools-prd
+            const output = `### values diff for Kyverno
 
             #### Helm diff 📖 \🖌\`${{ steps.diff.outcome }}\`
 
