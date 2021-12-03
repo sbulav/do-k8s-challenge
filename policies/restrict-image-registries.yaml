@@ -14,7 +14,7 @@ metadata:
       registries helps reduce threat exposure by ensuring image pulls only come from them. This
       sample validates that container images only originate from the registry `registry.digitalocean.com`
 spec:
-  validationFailureAction: audit
+  validationFailureAction: enforce
   background: true
   rules:
   - name: validate-registries
