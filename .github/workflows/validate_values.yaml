@@ -8,7 +8,7 @@ on:
     - 'helm/values/kyverno-policies/**'
 
 jobs:
-  deploy:
+  validate_helm_values:
     name: validate kyverno values
     runs-on: ubuntu-latest
 
