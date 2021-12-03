@@ -1,5 +1,13 @@
 # Changelog
 
+### [1.2.1](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.2.0...v1.2.1) (2021-12-03)
+
+
+### Bug Fixes
+
+* labels can only have alphanumeric ([a68c6fb](https://www.github.com/sbulav/do-k8s-challenge/commit/a68c6fb8b7b0b908c2e566c62028275fbc248d6a))
+* use reponame for labels ([0f8f031](https://www.github.com/sbulav/do-k8s-challenge/commit/0f8f031060a92504947ac9a7a51f912b13b7ca82))
+
 ## [1.2.0](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.1.0...v1.2.0) (2021-12-03)
 
 
