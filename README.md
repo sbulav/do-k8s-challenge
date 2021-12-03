@@ -61,7 +61,7 @@ Steps required for initial deployment of Kyverno:
 
 In this example, we'll modify Kyverno Helm values, adding new `reponame` label:
 
-![modifying_values01](assets/images/modifying_values01.png])
+![modifying_values01](assets/images/modifying_values01.png)
 
 Create a new branch, push your changes and create a new Pull Request:
 
@@ -88,6 +88,7 @@ will be created automatically:
 In this example, we'll add new custom Kyverno policy, allowing images only from
 allowed registries.
 
+
 Create a new branch, push your changes and create a new Pull Request:
 
 ![adding_policy01](assets/images/adding_policy01.png)
@@ -97,6 +98,13 @@ Make sure that all checks have passed.
 Merge the PR and notice that deployment has been triggered automatically:
 
 ![adding_policy02](assets/images/adding_policy02.png)
+
+Now let's push an image into our registry. I'll use `nginx:latest` for that:
+
+``` bash
+docker tag nginx:latest registry.digitalocean.com/do-k8s-challenge-cr/nginx:latest
+docker push registry.digitalocean.com/do-k8s-challenge-cr/nginx:latest
+```
 
 After successful deployment, let's try to run Pods with images from different
 registries:
