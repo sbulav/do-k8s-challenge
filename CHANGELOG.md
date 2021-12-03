@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.1.0...v1.2.0) (2021-12-03)
+
+
+### Features
+
+* Add restrict-image-registries ([c12b61a](https://www.github.com/sbulav/do-k8s-challenge/commit/c12b61ab5d6d48c368dbe3321c0f3ed200eb240d))
+
 ## [1.1.0](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.0.0...v1.1.0) (2021-12-03)
 
 
