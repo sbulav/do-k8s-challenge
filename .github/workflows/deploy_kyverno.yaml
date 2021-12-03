@@ -6,7 +6,6 @@ on:
     paths:
     - 'helm/values/kyverno/**'
     - 'helm/values/kyverno-policies/**'
-    - 'policies/**'
 
 jobs:
   deploy:
@@ -57,8 +56,3 @@ jobs:
             --namespace kyverno \
             kyverno/kyverno-policies \
             -f ./helm/values/kyverno-policies/values.yaml \
-
-      - name: Apply custom policies
-        id: custom-policies
-        run: |
-          kubectl apply -f ./policies --namespace kyverno

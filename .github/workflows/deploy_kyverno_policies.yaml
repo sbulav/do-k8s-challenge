@@ -1,0 +1,29 @@
+name: Deploy updated Kyverno policies
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - 'policies/**'
+
+jobs:
+  deploy-policies:
+    name: deploy Kyverno policies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.3.4
+        with:
+          personalAccessToken: ${{ secrets.DO_K8S_TOKEN }}
+          clusterName: ${{ secrets.DO_K8S_CLUSTER_NAME }}
+
+      - name: Apply custom policies
+        id: custom-policies
+        run: |
+          kubectl apply -f ./policies --namespace kyverno
