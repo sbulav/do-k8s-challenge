@@ -1,11 +1,12 @@
-name: Manual deployment of Kyverno
+name: Deploy Kyverno with new Values
 on:
-  workflow_dispatch:
-    inputs:
-      dry-run:
-        description: Use dry-run instead of actual installation
-        default: 'true'
-        required: true
+  push:
+    branches:
+      - main
+    paths:
+    - 'helm/values/kyverno/**'
+    - 'helm/values/kyverno-policies/**'
+    - 'policies/**'
 
 jobs:
   deploy:
@@ -40,12 +41,6 @@ jobs:
         run: |
           helm repo update
 
-      - name: Add Helm dry-run flag
-        if: github.event.inputs.dry-run == 'true'
-        id: dry-run
-        run: |
-          echo "::set-output name=flag::--dry-run"
-
       - name: Deploy Kyverno
         id: deploy-chart
         run: |
@@ -54,7 +49,6 @@ jobs:
             --namespace kyverno \
             kyverno/kyverno \
             -f ./helm/values/kyverno/values.yaml \
-            ${{ steps.dry-run.outputs.flag }}
 
       - name: Deploy Kyverno Policies
         id: deploy-policies
@@ -63,10 +57,8 @@ jobs:
             --namespace kyverno \
             kyverno/kyverno-policies \
             -f ./helm/values/kyverno-policies/values.yaml \
-            ${{ steps.dry-run.outputs.flag }}
 
       - name: Apply custom policies
-        if: github.event.inputs.dry-run != 'true'
         id: custom-policies
         run: |
           kubectl apply -f ./policies --namespace kyverno
