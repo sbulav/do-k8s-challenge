@@ -1,5 +1,12 @@
 # Changelog
 
+### [1.2.2](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.2.1...v1.2.2) (2021-12-03)
+
+
+### Bug Fixes
+
+* Set restrict policy to enfore ([8363d11](https://www.github.com/sbulav/do-k8s-challenge/commit/8363d1149184fe0e6f3ffe1b092a99a59b7398f2))
+
 ### [1.2.1](https://www.github.com/sbulav/do-k8s-challenge/compare/v1.2.0...v1.2.1) (2021-12-03)
 
 
