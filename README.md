@@ -26,6 +26,8 @@ Pull Request. Each PR is linted and validated.
 
 - [DOKS cluster](https://docs.digitalocean.com/products/kubernetes/quickstart/)
   - Digital Ocean Kubernetes Cluster Created
+- [DOCR registry](https://www.digitalocean.com/products/container-registry/)
+  - Digital Ocean Container Registry Created and attached to our cluster
 - [DO Personal access token](https://docs.digitalocean.com/reference/api/create-personal-access-token/)
   - Digital Ocean PAT used for getting kubeconfig
 - [GitHub Personal access token](https://docs.digitalocean.com/reference/api/create-personal-access-token/)
