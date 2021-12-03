@@ -1,0 +1,73 @@
+name: Manual deployment of Kyverno
+on:
+  workflow_dispatch:
+      dry-run:
+        description: Use dry-run instead of actual installation
+        default: 'true'
+        required: true
+
+jobs:
+  deploy:
+    name: deploy Kyverno
+    env:
+      TOKEN: ${{ secrets.DO_K8S_TOKEN }}
+      CLUSTER_NAME: ${{ DO_K8S_CLUSTER_NAME }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.3.4
+        with:
+          personalAccessToken: ${{ secrets.TOKEN }}
+          clusterName: DO_K8S_CLUSTER_NAME
+
+      - name: Setup Helm
+        id: install
+        uses: azure/setup-helm@v1
+        with:
+          version: 'v3.7.1' # default is latest stable
+
+      - name: Add Kyverno Helm chart
+        id: add-chart
+        run: |
+          helm repo add kyverno https://kyverno.github.io/kyverno/
+
+      - name: Scan Helm repo for charts
+        id: scan-chart
+        run: |
+          helm repo update
+
+      - name: Add Helm dry-run flag
+        if: github.event.inputs.dry-run == 'true'
+        id: dry-run
+        run: |
+          echo "::set-output name=flag::--dry-run"
+
+      - name: Deploy Kyverno
+        id: deploy-chart
+        run: |
+          helm upgrade --install kyverno \
+            --create-namespace \
+            --namespace kyverno \
+            kyverno/kyverno \
+            -f ./helm/values/kyverno/values.yaml \
+            ${{ steps.dry-run.outputs.flag }}
+
+      - name: Deploy Kyverno Policies
+        id: deploy-policies
+        run: |
+          helm upgrade --install kyverno-policies \
+            --namespace kyverno \
+            kyverno/kyverno-policies \
+            -f ./helm/values/kyverno-policies/values.yaml \
+            ${{ steps.dry-run.outputs.flag }}
+
+      - name: Apply custom policies
+        if: github.event.inputs.dry-run != 'true'
+        id: custom-policies
+        run: |
+          kubectl apply -f ./policies --namespace kyverno
