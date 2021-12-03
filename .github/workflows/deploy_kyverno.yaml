@@ -1,6 +1,7 @@
 name: Manual deployment of Kyverno
 on:
   workflow_dispatch:
+    inputs:
       dry-run:
         description: Use dry-run instead of actual installation
         default: 'true'
@@ -9,9 +10,7 @@ on:
 jobs:
   deploy:
     name: deploy Kyverno
-    env:
-      TOKEN: ${{ secrets.DO_K8S_TOKEN }}
-      CLUSTER_NAME: ${{ DO_K8S_CLUSTER_NAME }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -22,8 +21,8 @@ jobs:
       - name: Set up kubectl
         uses: matootie/dokube@v1.3.4
         with:
-          personalAccessToken: ${{ secrets.TOKEN }}
-          clusterName: DO_K8S_CLUSTER_NAME
+          personalAccessToken: ${{ secrets.DO_K8S_TOKEN }}
+          clusterName: ${{ secrets.DO_K8S_CLUSTER_NAME }}
 
       - name: Setup Helm
         id: install
