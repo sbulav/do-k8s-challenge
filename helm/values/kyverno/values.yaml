@@ -3,7 +3,8 @@ fullnameOverride:
 namespace:
 
 # -- Additional labels
-customLabels: {}
+customLabels:
+  repo_url: https://github.com/sbulav/do-k8s-challenge
 
 rbac:
   create: true
