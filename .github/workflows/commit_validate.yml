@@ -6,6 +6,7 @@ on:
 jobs:
   validate-commits:
     runs-on: ubuntu-latest
+    if: ${{ github.event.pusher.name != 'github-actions[bot]' }}
     steps:
     - uses: actions/checkout@v2
       with:
